@@ -24,14 +24,14 @@
 		{
 			$product->define_column('garbee_preorder', 'Preorder');
 			$product->define_column('garbee_preorder_details', 'Extra details on the preorder')->invisible()->validation()->fn('trim');
-            $product->define_column('garbee_release_date', 'Release date for the product')->defaultInvisible();
+            $product->define_column('garbee_release_date', 'Release date for the product')->type(db_date)->defaultInvisible();
 		}
 
 		public function extend_product_form($product, $context)
 		{
 			$product->add_form_field('garbee_preorder')->comment('Is this product available for preorder?')->tab('Inventory')->renderAs(frm_checkbox);
-			$product->add_form_field('garbee_preorder_details')->comment('Information to display about this preorder.')->tab('Inventory')->renderAs(frm_html);
-			$product->add_form_field('garbee_release_date')->comment('Release date for the product')->tab('Inventory')->renderAs(frm_date);
+			$product->add_form_field('garbee_preorder_details','left')->comment('Information to display about this preorder.')->tab('Inventory')->renderAs(frm_html);
+			$product->add_form_field('garbee_release_date', 'right')->comment('Release date for the product')->tab('Inventory')->renderAs(frm_date);
 		}
 	}
 
