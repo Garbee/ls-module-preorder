@@ -23,13 +23,13 @@
 		public function extend_product_model($product)
 		{
 			$product->define_column('garbee_preorder', 'Preorder');
-			$product->define_column('garbee_preorder_details', 'Extra details on the preorder');
+			$product->define_column('garbee_preorder_details', 'Extra details on the preorder')->validation()->fn('trim')->invisible();
 		}
 
 		public function extend_product_form($product, $context)
 		{
 			$product->add_form_field('garbee_preorder')->comment('Is this product available for preorder?')->tab('Inventory')->renderAs(frm_checkbox);
-			$product->add_form_field('garbee_preorder_details')->comment('Information to display about this preorder.')->tab('Inventory')->size('small')->renderAs(frm_code_editor)->language('php')->saveCallback('save_code');
+			$product->add_form_field('garbee_preorder_details')->comment('Information to display about this preorder.')->tab('Inventory')->renderAs(frm_html);
 		}
 	}
 
