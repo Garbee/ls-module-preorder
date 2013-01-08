@@ -21,9 +21,9 @@
 
 		public function extend_product_model($product)
 		{
-			$product->define_column('garbee_preorder', 'Pre-order');
-			$product->define_column('garbee_preorder_details', 'Extra details on the preorder')->invisible()->validation()->fn('trim');
-            			$product->define_column('garbee_release_date', 'Release date for the product')->type(db_date)->defaultInvisible();
+			$product->define_column('garbee_preorder', 'Pre-order')->type(db_bool)->defaultInvisible();
+			$product->define_column('garbee_preorder_details', 'Extra details on the preorder')->type(db_text)->invisible()->validation()->fn('trim');
+            		$product->define_column('garbee_release_date', 'Release date for the product')->type(db_date)->defaultInvisible();
 		}
 
 		public function extend_product_form($product, $context)
