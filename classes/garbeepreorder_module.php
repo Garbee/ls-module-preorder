@@ -25,8 +25,8 @@
 
 		public function extend_product_form($product, $context)
 		{
-			$product->add_form_field('garbee_preorder','left')->comment('Is the product for pre-order?')->tab('Pre-order')->renderAs(frm_checkbox);
-			$product->add_form_field('garbee_release_date', 'left')->comment('Release date for the product.','above')->tab('Pre-order')->renderAs(frm_date);
+			$product->add_form_field('garbee_preorder','left')->tab('Pre-order')->renderAs(frm_checkbox);
+			$product->add_form_field('garbee_release_date', 'left')->tab('Pre-order')->renderAs(frm_date);
 			$product->add_form_field('garbee_preorder_details','left')->comment('Extra information to display about this preorder.','above')->tab('Pre-order')->renderAs(frm_html);
 		}
 	}
