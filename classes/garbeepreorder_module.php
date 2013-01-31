@@ -48,6 +48,8 @@
                                     garbee_preorder = 0
                                 WHERE
                                     shop_products.garbee_release_date = :today
+                                	AND
+                                    shop_products.garbee_preorder = 1;
                                 ',array(
                                 	'today'=>$today
                                 	)
