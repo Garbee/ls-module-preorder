@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ls-module-preorder extension by Garbee</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Garbee/ls-module-preorder">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Garbee/ls-module-preorder/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Garbee/ls-module-preorder/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Pre-order Module</h1>
+          <p>A module for LemonStand adding proper Pre-order fields.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Garbee">Garbee</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>Why?</h2>
+
+          <p>There are very few things in the LemonStand system by default to help you show interface hints to customers for items that are on pre-order.
+            This is a pretty basic task. Since you don't want to have to go through the product description with every pre-order you run and then find and remove
+            the pre-order information. What could be simpler than a checkbox? </p>
+
+            <p>Yes, there is a built in "pre-order" function under the Inventory tab. However,
+            this button also makes it so customers can buy an unlimited number of product without question. This can be very alarming if you pre-sell items that
+            are in high demand but low availability. So, this simple module helps you to easily state whether an item is on pre-order, what its release date is, and
+            give any extra information needed. Then, when the product releases, it is as easy as a checkbox or running a script to remove all the information from the frontend and
+            sales continue as normal. No fussing with different inventory setups since it is exactly the same on pre-order as it is on a real sale.
+          </p>
+
+<h2>How?</h2>
+
+<h3>Install instructions</h3>
+
+<p>Installation is very simple. You can either get the module as you would any other on the <a href="http://lemonstand.com/marketplace/module/garbeepreorder/">Marketplace</a> or you can download the code directly via GitHub.</p>
+<blockquote>It is recommended to get the module via the marketplace. It is much simpler to install and update in case any updates are required.</blockquote>
+  <h4>Marketplace</h4>
+    <p>If you decide to download via the marketplace. Simply add the module to your account and then bind it to your license like you would any other module. Then upon updating your copy of LemonStand you will recieve the module.
+  <h4>Manual install</h4>
+    <p>So, you want to do this the hard way? Fortunately, it is still pretty easy.
+      <ol>
+        <li>Manually download the source from Github. You can also get a ZIP by clicking on the button at the top of this page.
+        <li>From there unzip the files locally using your favorite program.
+        <li>Once the files are unzipped, open an SFTP (or any other secure line) connection to your website install.
+        <li>Go to the "modules" folder from the document root of the LemonStand install.
+        <li>Make a new folder called "garbeepreorder".
+        <li>Upload the files there and then login to your backend.
+      </ol>
+<h3>Setting values for products.</h3>
+
+<p>To set the information, simply go into the products edit page in the backend and go to the Pre-Order tab.</p>
+
+<h3>Getting the information into the front-end</h3>
+
+<p>
+  To check if a pre-order is turned on, simply check for garbee_preorder on the product.
+  This will allow you to trigger frontend user-interface elements specific to products on pre-order.
+  <pre><code>
+    &lt;?php if ($product->garbee_preorder); ?>
+  </code></pre>
+</p>
+<p>
+  To check for and retrieve the extra details you can use the following code.
+  This allows you to give a message specific to the items pre-order that differs from other pre-order items.
+  <pre><code>
+    &lt;?php if($product->garbee_preorder_details); ?> //Checks for the details.
+    &lt;?php echo $product->garbee_preorder_details); ?> //Displays the details
+  </code></pre>
+</p>
+<p>
+  To check for a release date and then display it, use the following code.
+  This is useful when having multiple pre-orders going on with different release dates.
+<pre><code>
+  &lt;?php if ($product->garbee_release_date); ?> //Checks if a date exists in the DB
+  &lt;?php echo $product->garbee_release_date->format('%x'); ?> //Displays the date.
+</code></pre>
+  Further, using this compared to the expected release date will let you adapt in situations where something releases on one day, but you may not expect any for sale until a later date.
+  It also will let it be removed from the frontend via the cron-job if things are structured properly.
+</p>
+
+<h4>Full front-end example</h4>
+<p>Here is a full example of how to integrate on the frontend. Using classes that work with the <a href="http://lemonstand.com/marketplace/theme/bootstrap/">Bootstrap theme</a>.
+  <pre><code>
+    &lt;?php if ($product->garbee_release_date): ?>
+       &lt;div class="alert alert-info">
+                    &lt;?php if($product->garbee_preorder_details):
+                         echo $product->garbee_preorder_details;
+                     endif; ?>
+                     &lt;?php if($product->garbee_release_date): ?>
+                      &lt;p>Release date is:&nbsp;&lt;?php echo $product->garbee_release_date->format('%x'); ?>&lt;/p>
+                    &lt;?php endif; ?>
+                &lt;/div>
+      &lt;?php endif; ?>
+  </pre></code>
+</p>
+
+<h2>Cron Job</h2>
+<p>
+  As of version 1.0.3 there is an access point that you can use to easily turn pre-release information on the frontend off for products.
+  This is achieved by using a cron-job (or manually accessing the page) located at http://www.yourdomain.com/garbee_check_presale .
+  Here is the code ran when this location is hit:
+  <pre><code>
+    $today = Phpr_DateTime::now()->getDate()->toSqlDate();
+
+                  Db_DbHelper::query('
+                    UPDATE
+                                    shop_products
+                                SET
+                                    garbee_preorder = 0
+                                WHERE
+                                    shop_products.garbee_release_date = :today
+                                  AND
+                                    shop_products.garbee_preorder = 1;
+                                ',array(
+                                  'today'=>$today
+                                  )
+                         );
+  </code></pre>
+  This checks for the current date using LemonStand's DateTime function and converts it into a sql format.
+  Once we have the date, we run a direct query on the database to look for products that have a release date of the current date and where garbee_preorder is turned on.
+  Once they are found, they are simply turned off by changing garbee_preorder to 0 if both of those qualifications are met.
+  <br>
+  Using this access point and a cron-job allows you to set pre-order products and forget them, while maintaining the pre-order details and release date after the pre-order has ended.
+</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34069358-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+  </body>
+</html>
